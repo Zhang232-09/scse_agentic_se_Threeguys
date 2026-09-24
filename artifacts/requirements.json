@@ -5,7 +5,7 @@
         "RIGHT",
         "STOP"
     ],
-    "goal": "AHEAD",
+    "goal": "reach destination",
     "safe_stop": true,
     "avoid_obstacles": true
 }
