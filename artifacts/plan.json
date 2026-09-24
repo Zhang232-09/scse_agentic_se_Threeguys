@@ -1,9 +1,10 @@
 {
-    "strategy": "Navigate forward while avoiding obstacles, prioritizing the goal direction",
+    "strategy": "Navigate to goal using forward movement with obstacle avoidance and safe stopping",
     "decisions": [
-        "Check if the goal is ahead and move forward if clear",
-        "If obstacle detected ahead, turn left or right to find a clear path",
-        "If goal is reached, stop safely"
+        "FORWARD",
+        "LEFT",
+        "RIGHT",
+        "STOP"
     ],
-    "stop_condition": "Stop when the goal 'AHEAD' is reached and the path is clear with no obstacles detected"
+    "stop_condition": "Stop when the goal is reached or when a safe stopping condition is met to avoid obstacles"
 }
