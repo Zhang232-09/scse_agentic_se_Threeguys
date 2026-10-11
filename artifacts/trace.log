@@ -1,0 +1,84 @@
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Full end-to-end pipeline completed successfully
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Starting revision iteration based on benchmark review
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Starting revision iteration based on benchmark review
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Starting revision iteration based on benchmark review
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Starting revision iteration based on benchmark review
+Developer Agent: Saved revised navigation_logic.py from run_developer_revision
+Test Agent: Generated revised pytest test_decide_next_move_revised.py
+Simulation Runner: Re-run simulation completed, simulation_report_revised.json saved
+IRSIM Benchmark: Re-run IRSIM benchmark finished, revised benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report_revised.json
+System: Revision iteration pipeline finished
+System: Full end-to-end pipeline completed successfully
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Benchmark result already fully efficient, skip revision iteration
+System: Full end-to-end pipeline completed successfully

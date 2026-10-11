@@ -1,18 +1,45 @@
+from ollama import chat
+import re
 
-### Create a system prompt that instructs the Test Agent to generate pytest-style tests for the decide_next_move function, 
-# based on the requirements and plan provided. 
-# The prompt should specify the expected input structure and required test coverage, 
-# while also enforcing constraints on the output format.
+system_prompt = """
+You are the Test Agent. Generate pytest-style tests for the decide_next_move(state) function.
+Input: requirements, plan, source code of decide_next_move.
+Output ONLY raw python test code. No markdown ``` fences.
+The test code must:
+1. Import decide_next_move from navigation_logic
+2. Include multiple test cases with assert statements
+3. Cover all possible scenarios (forward, left, right, stop)
+4. No extra explanation text, only python code.
+"""
 
+def validate_test_code(code: str) -> bool:
+    if not isinstance(code, str) or len(code.strip()) == 0:
+        return False
+    if "```" in code:
+        return False
+    if "import" not in code or "assert" not in code:
+        return False
+    return True
 
-## Write a function to validate the generated test code. 
-# It should check that the code is a non-empty string, does not contain markdown fences, 
-# Also check that the test code includes all the necessary keywords like the import statements and test assertions.
+def run_test_agent(requirements: dict, plan: dict, nav_code: str) -> str:
+    user_msg = f"""
+Requirements:
+{requirements}
 
+Plan:
+{plan}
 
-## Write a function to run the Test Agent. 
-# It should take in requirements and a plan, send them to the Test Agent.
-# Thefunction must return the generated test code after validation.
-
-
-
+navigation_logic source code:
+{nav_code}
+"""
+    resp = chat(
+        model="qwen3:8b",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_msg}
+        ]
+    )
+    generated_code = resp["message"]["content"]
+    if not validate_test_code(generated_code):
+        raise ValueError("Generated test code failed validation")
+    return generated_code

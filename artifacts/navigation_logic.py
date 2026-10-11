@@ -6,17 +6,21 @@ def decide_next_move(state):
     elif state['goal_on_right'] and not state['right_blocked']:
         return "RIGHT"
     else:
-        if state['front_blocked']:
-            if not state['left_blocked']:
+        if not state['front_blocked'] or not state['left_blocked'] or not state['right_blocked']:
+            # Try to move toward the goal if any direction is unblocked
+            if not state['front_blocked']:
+                return "FORWARD"
+            elif not state['left_blocked']:
                 return "LEFT"
             elif not state['right_blocked']:
                 return "RIGHT"
-            else:
-                return "STOP"
         else:
-            if not state['left_blocked']:
-                return "LEFT"
-            elif not state['right_blocked']:
-                return "RIGHT"
-            else:
-                return "STOP"
+            return "STOP"
+
+
+
+### 📌 Explanation of Key Decisions
+
+
+
+

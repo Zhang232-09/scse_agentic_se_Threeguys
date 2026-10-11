@@ -5,7 +5,7 @@
     "RIGHT",
     "STOP"
   ],
-  "goal": "goal",
+  "goal": "string",
   "safe_stop": true,
   "avoid_obstacles": true
 }

@@ -1,12 +1,39 @@
-## Create a system prompt for the Reviewer Agent that instructs it to analyze the simulation report and output a JSON object with specific keys.
-## The JSON object it outputs must follow a strict schema and contain keys "issue", "likely_cause", "recommendation", and "needs_revision".
-## The Reviewer Agent should validate the output to ensure it adheres to the schema and that "needs_revision" is a boolean.
+from ollama import chat
+import json
 
+system_prompt = """
+You are Reviewer Agent. Analyze simulation report.
+Output ONLY valid JSON with keys: "issue", "likely_cause", "recommendation", "needs_revision".
+Rules:
+- issue: string
+- likely_cause: string
+- recommendation: string
+- needs_revision: boolean true/false
+No extra text, no markdown, only pure JSON.
+"""
 
+def validate_reviewer_output(data: dict) -> bool:
+    required_keys = {"issue", "likely_cause", "recommendation", "needs_revision"}
+    if not isinstance(data, dict):
+        return False
+    if not required_keys.issubset(data.keys()):
+        return False
+    if not isinstance(data["needs_revision"], bool):
+        return False
+    if not all(isinstance(data[k], str) for k in ["issue", "likely_cause", "recommendation"]):
+        return False
+    return True
 
-## Create a function to validate the output of the Reviewer Agent.
-## It should check that the output is a JSON object with the required keys and that "needs_revision" is a boolean, and the rest of the keys are strings.
-
-
-## Create a function to run the Reviewer Agent.
-## It should take in the simulation report, send it to the Reviewer Agent, and return the validated output.
+def run_reviewer(simulation_report: dict) -> dict:
+    resp = chat(
+        model="qwen3:8b",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": json.dumps(simulation_report, indent=2)}
+        ]
+    )
+    raw = resp["message"]["content"]
+    result = json.loads(raw)
+    if not validate_reviewer_output(result):
+        raise ValueError("Reviewer output schema invalid")
+    return result

@@ -1,32 +1,103 @@
+from ollama import chat
+import json
 
+system_prompt = """
+You are Benchmark Reviewer Agent. Analyze IR-SIM benchmark report.
+Output ONLY valid JSON with keys:
+"issue", "likely_cause", "recommendation", "safety_passed", "goal_completion_passed", "efficiency_passed", "needs_revision".
+- safety_passed, goal_completion_passed, efficiency_passed, needs_revision: boolean
+- Others: string
+No explanation, no markdown, only pure JSON.
+"""
 
-## Create a system prompt for the Reviewer Agent that instructs it to analyze the IR-SIM Benchmark report and output a JSON object with specific keys.
-## The JSON object it outputs must follow a strict schema and contain keys "issue", "likely_cause", "recommendation", "safety_passed", "goal_completion_passed", "efficiency_passed", and "needs_revision".
-## The Reviewer Agent should validate the output to ensure it adheres to the schema and that "safety_passed", "goal_completion_passed", "efficiency_passed", and "needs_revision" are booleans.
+def validate_benchmark_review(data: dict) -> bool:
+    required_keys = {
+        "issue", "likely_cause", "recommendation",
+        "safety_passed", "goal_completion_passed",
+        "efficiency_passed", "needs_revision"
+    }
+    if not isinstance(data, dict):
+        return False
+    if not required_keys.issubset(data.keys()):
+        return False
+    bool_fields = ["safety_passed", "goal_completion_passed", "efficiency_passed", "needs_revision"]
+    for f in bool_fields:
+        if not isinstance(data[f], bool):
+            return False
+    str_fields = ["issue", "likely_cause", "recommendation"]
+    for f in str_fields:
+        if not isinstance(data[f], str):
+            return False
+    return True
 
+def build_deterministic_review(bench_report: dict) -> dict:
+    safety_passed = True
+    goal_completion_passed = True
+    efficiency_passed = True
+    issue = ""
+    likely_cause = ""
+    recommendation = ""
+    needs_revision = False
 
+    worlds = bench_report.get("world_results", [])
+    for w in worlds:
+        if w.get("collision_or_done") and not w.get("reached_goal"):
+            safety_passed = False
+            issue = "Unsafe benchmark behavior detected"
+            likely_cause = "Robot collided with obstacle before reaching destination."
+            recommendation = "Add obstacle avoidance logic in decide_next_move."
+            needs_revision = True
 
-## Create a function to validate the output of the Reviewer Agent for the benchmark report.
-## It should check that the output is a JSON object with the required keys and that "safety_passed", "goal_completion_passed", "efficiency_passed", and "needs_revision" are booleans, and the rest of the keys are strings.
-## If the output does not meet these criteria, raise a ValueError.
+    success_rate = bench_report.get("success_rate", 1.0)
+    if success_rate < 1.0:
+        goal_completion_passed = False
+        issue = "Goal completion failure"
+        likely_cause = "Some environments failed to reach target."
+        recommendation = "Tune navigation logic to reliably reach goals."
+        needs_revision = True
 
+    inefficient = bench_report.get("inefficient_success_worlds", 0)
+    eff_rate = bench_report.get("efficiency_rate", 1.0)
+    if inefficient > 0 or eff_rate < 1.0:
+        efficiency_passed = False
+        issue = "Successful but inefficient navigation"
+        likely_cause = "Robot took extra steps to reach goal."
+        recommendation = "Shorten path planning logic."
+        needs_revision = True
 
+    return {
+        "issue": issue,
+        "likely_cause": likely_cause,
+        "recommendation": recommendation,
+        "safety_passed": safety_passed,
+        "goal_completion_passed": goal_completion_passed,
+        "efficiency_passed": efficiency_passed,
+        "needs_revision": needs_revision
+    }
 
-
-
-## Create a function to build a deterministic review from the benchmark report.
-## This function analyzes the benchmark report and determines the values for "safety_passed", "goal_completion_passed", "efficiency_passed", and "needs_revision" based on the measured benchmark fields.
-## It returns a dictionary with the keys "issue", "likely_cause", "recommendation", "safety_passed", "goal_completion_passed", "efficiency_passed", and "needs_revision".
-## If the benchmark report does not contain the required fields, default values will be used.
-## If safety_passed is false, the issue will be described as "Unsafe benchmark behavior detected". Safety is measured as any world having collision_or_done true while reached_goal is false.
-## If goal_completion_passed is false, the issue will be described as "Goal completion failure". Goal completion is measured as success_rate being less than 1.0.
-## If efficiency_passed is false, the issue will be described as "Successful but inefficient navigation". Efficiency is measured as inefficient_success_worlds being greater than 0 or efficiency_rate being less than 1.0.
-
-
-
-
-
-## Create a function to run the Reviewer Agent for the benchmark report.
-## It should take in the benchmark report, build a deterministic review, send both to the Reviewer Agent, and return the validated output.
-## The deterministic review is used to ensure that the pass/fail booleans in the output are based on the measured benchmark results, even if the LLM phrases the issue, likely cause, and recommendation.
-## The output of this function will be a dictionary with the keys "issue", "likely_cause", "recommendation", "safety_passed", "goal_completion_passed", "efficiency_passed", and "needs_revision".
+def run_benchmark_reviewer(benchmark_report: dict) -> dict:
+    deterministic = build_deterministic_review(benchmark_report)
+    user_msg = f"""
+Benchmark report:
+{json.dumps(benchmark_report, indent=2)}
+Deterministic pass/fail result:
+{json.dumps(deterministic, indent=2)}
+Keep all boolean values from deterministic result, rewrite the text description.
+"""
+    resp = chat(
+        model="qwen3:8b",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_msg}
+        ]
+    )
+    raw = resp["message"]["content"]
+    result = json.loads(raw)
+    # Force boolean values to keep deterministic calculation
+    result["safety_passed"] = deterministic["safety_passed"]
+    result["goal_completion_passed"] = deterministic["goal_completion_passed"]
+    result["efficiency_passed"] = deterministic["efficiency_passed"]
+    result["needs_revision"] = deterministic["needs_revision"]
+    if not validate_benchmark_review(result):
+        raise ValueError("Benchmark reviewer output schema invalid")
+    return result

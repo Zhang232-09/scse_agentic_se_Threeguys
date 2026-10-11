@@ -1,10 +1,10 @@
 {
-  "strategy": "Dynamic Pathfinding with Obstacle Avoidance",
+  "strategy": "Systematically navigate towards the goal while avoiding obstacles and ensuring a safe stop.",
   "decisions": [
     "FORWARD",
     "LEFT",
     "RIGHT",
     "STOP"
   ],
-  "stop_condition": "Reached the goal location"
+  "stop_condition": "when the robot reaches the goal and confirms that stopping is safe."
 }

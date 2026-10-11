@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import sys
-from generated.navigation_logic import decide_next_move
+from artifacts.navigation_logic import decide_next_move
 
 os.makedirs("artifacts", exist_ok=True)
 

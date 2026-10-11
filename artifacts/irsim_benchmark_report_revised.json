@@ -1,0 +1,72 @@
+{
+  "total_worlds": 4,
+  "goals_reached": 0,
+  "success_rate": 0.0,
+  "efficient_worlds": 0,
+  "inefficient_success_worlds": 0,
+  "failed_worlds": 4,
+  "efficiency_rate": 0.0,
+  "average_steps_taken": 6.25,
+  "results": [
+    {
+      "reached_goal": false,
+      "collision_or_done": false,
+      "steps_taken": 5,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "failed",
+      "efficiency_passed": false,
+      "final_pose": [
+        1.2400000000000002,
+        1.0,
+        0.0
+      ],
+      "history_length": 5
+    },
+    {
+      "reached_goal": false,
+      "collision_or_done": false,
+      "steps_taken": 6,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "failed",
+      "efficiency_passed": false,
+      "final_pose": [
+        1.2060814266725912,
+        1.0357013021887589,
+        0.2400000000000002
+      ],
+      "history_length": 6
+    },
+    {
+      "reached_goal": false,
+      "collision_or_done": false,
+      "steps_taken": 8,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "failed",
+      "efficiency_passed": false,
+      "final_pose": [
+        1.2279895966652252,
+        1.0631343634305488,
+        0.4800000000000004
+      ],
+      "history_length": 8
+    },
+    {
+      "reached_goal": false,
+      "collision_or_done": false,
+      "steps_taken": 6,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "failed",
+      "efficiency_passed": false,
+      "final_pose": [
+        1.2060814266725912,
+        1.0357013021887589,
+        0.2400000000000002
+      ],
+      "history_length": 6
+    }
+  ]
+}

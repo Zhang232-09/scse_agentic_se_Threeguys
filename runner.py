@@ -1,9 +1,73 @@
+import json
+from pathlib import Path
 
+# Ensure artifacts folder exists
+Path("artifacts").mkdir(exist_ok=True)
 
-## Create a function to run the simulation of the navigation logic.
-## It should define a set of scenarios with different states (e.g., front_blocked, left_blocked, right_blocked), expected outputs (e.g., FORWARD, LEFT, RIGHT, STOP), and then run the decide_next_move function on each scenario.
-## The function should collect the results, including whether the actual output matches the expected output, and return a report summarizing the results.
-## The report must include the total number of scenarios, the number of passed and failed scenarios, and a success rate, which is the number of passed scenarios divided by the total number of scenarios.
+# Import the generated navigation function
+from artifacts.navigation_logic import decide_next_move
 
+def run_simulation():
+    # Define test scenarios: each has state dict and expected action
+    scenarios = [
+        {
+            "state": {"goal_ahead": True, "goal_on_left": False, "goal_on_right": False,
+                      "front_blocked": False, "left_blocked": False, "right_blocked": False},
+            "expected": "FORWARD"
+        },
+        {
+            "state": {"goal_ahead": False, "goal_on_left": True, "goal_on_right": False,
+                      "front_blocked": True, "left_blocked": False, "right_blocked": False},
+            "expected": "LEFT"
+        },
+        {
+            "state": {"goal_ahead": False, "goal_on_left": False, "goal_on_right": True,
+                      "front_blocked": True, "left_blocked": False, "right_blocked": False},
+            "expected": "RIGHT"
+        },
+        {
+            "state": {"goal_ahead": False, "goal_on_left": False, "goal_on_right": False,
+                      "front_blocked": True, "left_blocked": True, "right_blocked": True},
+            "expected": "STOP"
+        }
+    ]
 
-## If this script is run directly, run the simulation function and save the simulation report to a JSON file.
+    results = []
+    passed = 0
+    failed = 0
+
+    for s in scenarios:
+        state = s["state"]
+        expected = s["expected"]
+        actual = decide_next_move(state)
+        is_pass = (actual == expected)
+        if is_pass:
+            passed += 1
+        else:
+            failed += 1
+        results.append({
+            "state": state,
+            "expected": expected,
+            "actual": actual,
+            "pass": is_pass
+        })
+
+    total = len(scenarios)
+    success_rate = passed / total if total > 0 else 0.0
+
+    report = {
+        "total_scenarios": total,
+        "passed_scenarios": passed,
+        "failed_scenarios": failed,
+        "success_rate": success_rate,
+        "scenario_details": results
+    }
+    return report
+
+if __name__ == "__main__":
+    sim_report = run_simulation()
+    # Save report to artifacts/simulation_report.json
+    out_path = Path("artifacts") / "simulation_report.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(sim_report, f, indent=2)
+    print("Simulation completed, simulation_report.json saved")

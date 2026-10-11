@@ -1,0 +1,9 @@
+{
+  "issue": "Failed to complete goals despite efficient step usage",
+  "likely_cause": "Robot failed to reach target positions within allowed steps.",
+  "recommendation": "Improve path planning to ensure goal completion within step limits.",
+  "safety_passed": true,
+  "goal_completion_passed": false,
+  "efficiency_passed": false,
+  "needs_revision": true
+}

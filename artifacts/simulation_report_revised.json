@@ -1,0 +1,60 @@
+{
+  "total_scenarios": 4,
+  "passed_scenarios": 4,
+  "failed_scenarios": 0,
+  "success_rate": 1.0,
+  "scenario_details": [
+    {
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "pass": true
+    },
+    {
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "pass": true
+    },
+    {
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "pass": true
+    },
+    {
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "pass": true
+    }
+  ]
+}
