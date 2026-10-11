@@ -1,11 +1,11 @@
 {
-    "allowed_actions": [
-        "FORWARD",
-        "LEFT",
-        "RIGHT",
-        "STOP"
-    ],
-    "goal": "navigate to goal",
-    "safe_stop": true,
-    "avoid_obstacles": true
+  "allowed_actions": [
+    "FORWARD",
+    "LEFT",
+    "RIGHT",
+    "STOP"
+  ],
+  "goal": "goal",
+  "safe_stop": true,
+  "avoid_obstacles": true
 }

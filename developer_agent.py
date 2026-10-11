@@ -1,17 +1,61 @@
 import ollama
 import re
 
-def run_developer(plan_data):
+def run_developer(plan_data, requirement_data):
     prompt = f"""
 YOU MUST NOT WRITE ANY EXPLANATIONS, NO INTRO SENTENCES, NO SUMMARY TEXT.
-OUTPUT ONLY RAW PYTHON CODE. NO ```python / ``` markdown tags.
-
+OUTPUT ONLY RAW PYTHON CODE. NO ```python / ``` markdown tags, NO --- separators.
 MANDATORY:
 Your output MUST START DIRECTLY WITH:
 def decide_next_move(state):
 Function input: state dictionary with keys goal_ahead, goal_on_left, goal_on_right, front_blocked, left_blocked, right_blocked.
 Return ONLY one string: "FORWARD", "LEFT", "RIGHT", "STOP".
 You can add helper functions AFTER this main function.
+
+Robot requirements:
+{requirement_data}
+
+Navigation plan:
+{plan_data}
+"""
+    resp = ollama.chat(
+        model="qwen3:8b",
+        messages=[{"role":"user", "content": prompt}]
+    )
+    raw_output = resp["message"]["content"]
+    code_str = re.sub(r"```[^\n]*\n", "", raw_output)
+    code_str = re.sub(r"\n```", "", code_str)
+    code_str = re.sub(r"^---$", "", code_str, flags=re.MULTILINE)
+
+    match_index = code_str.find("def decide_next_move(state):")
+    if match_index != -1:
+        code_str = code_str[match_index:]
+    validate_developer_output(code_str)
+    return code_str
+
+
+def run_developer_revision(old_code, review_notes, simulation_report, requirement_data, plan_data):
+    prompt = f"""
+YOU MUST NOT WRITE ANY EXPLANATIONS, NO INTRO SENTENCES, NO SUMMARY TEXT.
+OUTPUT ONLY RAW PYTHON CODE. NO ```python / ``` markdown tags, NO --- separators.
+MANDATORY:
+Your output MUST START DIRECTLY WITH:
+def decide_next_move(state):
+Function input: state dictionary with keys goal_ahead, goal_on_left, goal_on_right, front_blocked, left_blocked, right_blocked.
+Return ONLY one string: "FORWARD", "LEFT", "RIGHT", "STOP".
+
+Fix the old navigation code according to review notes and simulation report.
+Old code:
+{old_code}
+
+Review notes:
+{review_notes}
+
+Simulation report:
+{simulation_report}
+
+Robot requirements:
+{requirement_data}
 
 Navigation plan:
 {plan_data}
@@ -22,11 +66,10 @@ Navigation plan:
     )
     raw_output = resp["message"]["content"]
 
-    # 清除markdown标记
     code_str = re.sub(r"```[^\n]*\n", "", raw_output)
     code_str = re.sub(r"\n```", "", code_str)
+    code_str = re.sub(r"^---$", "", code_str, flags=re.MULTILINE)
 
-    # 关键修复：找到 def decide_next_move(state): 这一行，丢弃它前面所有废话
     match_index = code_str.find("def decide_next_move(state):")
     if match_index != -1:
         code_str = code_str[match_index:]

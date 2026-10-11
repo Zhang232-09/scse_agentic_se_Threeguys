@@ -1,0 +1,6 @@
+System: Directory artifacts already exists
+System: Directory artifacts already exists
+Analyst Agent: created requirements.json
+Planner Agent: created plan.json
+Developer Agent: created navigation_logic.py
+System: Whole pipeline finished successfully
