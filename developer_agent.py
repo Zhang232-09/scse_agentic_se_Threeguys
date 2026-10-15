@@ -30,15 +30,10 @@ Navigation plan:
         code_str = re.sub(r"```[^\n]*\n", "", raw_output)
         code_str = re.sub(r"\n```", "", code_str)
         code_str = re.sub(r"^---$", "", code_str, flags=re.MULTILINE)
-        # Remove markdown table lines starting with |
         code_str = re.sub(r"^\|.*$", "", code_str, flags=re.MULTILINE)
-        # Remove markdown bullet list lines starting with -
         code_str = re.sub(r"^-.*$", "", code_str, flags=re.MULTILINE)
-        # Remove numbered list lines like "1. xxx", "2. xxx"
         code_str = re.sub(r"^\d+\..*$", "", code_str, flags=re.MULTILINE)
-        # Remove unicode arrow symbols
         code_str = code_str.replace("→", "").replace("←", "").replace("↑", "").replace("↓", "")
-        # Remove top-level print statements
         code_str = re.sub(r"^print\(.*\)$", "", code_str, flags=re.MULTILINE)
         match_index = code_str.find("def decide_next_move(state):")
         if match_index == -1:
@@ -112,15 +107,10 @@ Navigation plan:
         code_str = re.sub(r"```[^\n]*\n", "", raw_output)
         code_str = re.sub(r"\n```", "", code_str)
         code_str = re.sub(r"^---$", "", code_str, flags=re.MULTILINE)
-        # Remove markdown table lines starting with |
         code_str = re.sub(r"^\|.*$", "", code_str, flags=re.MULTILINE)
-        # Remove markdown bullet list lines starting with -
         code_str = re.sub(r"^-.*$", "", code_str, flags=re.MULTILINE)
-        # Remove numbered list lines like "1. xxx", "2. xxx"
         code_str = re.sub(r"^\d+\..*$", "", code_str, flags=re.MULTILINE)
-        # Remove unicode arrow symbols
         code_str = code_str.replace("→", "").replace("←", "").replace("↑", "").replace("↓", "")
-        # Remove top-level print statements
         code_str = re.sub(r"^print\(.*\)$", "", code_str, flags=re.MULTILINE)
         match_index = code_str.find("def decide_next_move(state):")
         if match_index == -1:
@@ -143,7 +133,6 @@ Navigation plan:
             continue
     print("WARNING: LLM revision generation failed after max retries, fallback to original navigation code")
     return old_code
-
 
 def validate_developer_output(code_str):
     if not isinstance(code_str, str):

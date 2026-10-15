@@ -180,13 +180,11 @@ def main():
             print("Agent returned STOP.")
             break
 
-        # Apply control to robot
+
         """ robot.vel = velocity """
 
-        # Advance simulator one step
         """ env.step() """
 
-        # Apply control through IR-SIM's step API
         env.step(velocity, action_id=0)
         env.render()
 

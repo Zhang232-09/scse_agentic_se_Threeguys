@@ -1,14 +1,11 @@
 import json
 from pathlib import Path
 
-# Ensure artifacts folder exists
 Path("artifacts").mkdir(exist_ok=True)
 
-# Import the generated navigation function
 from artifacts.navigation_logic import decide_next_move
 
 def run_simulation():
-    # Define test scenarios: each has state dict and expected action
     scenarios = [
         {
             "state": {"goal_ahead": True, "goal_on_left": False, "goal_on_right": False,
@@ -66,7 +63,6 @@ def run_simulation():
 
 if __name__ == "__main__":
     sim_report = run_simulation()
-    # Save report to artifacts/simulation_report.json
     out_path = Path("artifacts") / "simulation_report.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(sim_report, f, indent=2)

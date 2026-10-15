@@ -30,13 +30,13 @@ def run_single_world(world_file_path):
         text=True
     )
     output = result.stdout
-    # Split output to get all lines, take the LAST line (the IRSIM report dict)
     lines = output.strip().splitlines()
     last_line = lines[-1].strip()
     match = re.search(r"\{.*\}", last_line)
     if not match:
         raise RuntimeError(f"No dict found in output for {world_file_path}. Raw output:\n{output}")
     dict_str = match.group(0)
+    #AI
     report_dict = ast.literal_eval(dict_str)
     return report_dict
 
@@ -51,12 +51,10 @@ def run_all_benchmark(world_files):
     for world_path in world_files:
         world_result = run_single_world(world_path)
         results.append(world_result)
-        # FIX KEY NAME: use steps_taken instead of steps
         steps = world_result["steps_taken"]
         total_steps += steps
         if world_result["reached_goal"]:
             reached_goal_count += 1
-            # FIX KEY NAME: use efficiency_passed instead of is_efficient
             if world_result["efficiency_passed"]:
                 efficient_count += 1
             else:
@@ -80,7 +78,6 @@ def run_all_benchmark(world_files):
     return benchmark_report
 
 if __name__ == "__main__":
-    # Edit this list to your actual world files
     world_file_list = [
     "irsim_worlds/world_easy.yaml",
     "irsim_worlds/world_medium.yaml",

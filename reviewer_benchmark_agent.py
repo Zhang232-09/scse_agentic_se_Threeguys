@@ -93,7 +93,6 @@ Keep all boolean values from deterministic result, rewrite the text description.
     )
     raw = resp["message"]["content"]
     result = json.loads(raw)
-    # Force boolean values to keep deterministic calculation
     result["safety_passed"] = deterministic["safety_passed"]
     result["goal_completion_passed"] = deterministic["goal_completion_passed"]
     result["efficiency_passed"] = deterministic["efficiency_passed"]

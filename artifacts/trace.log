@@ -82,3 +82,15 @@ IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
 Benchmark Reviewer: Generated benchmark_review_report.json
 System: Benchmark result already fully efficient, skip revision iteration
 System: Full end-to-end pipeline completed successfully
+System: Initialising pipeline and creating artifacts folder
+System: Loaded brief.txt
+Analyst Agent: Generated requirements.json
+Planner Agent: Generated plan.json
+Developer Agent: Generated navigation_logic.py
+Test Agent: Generated pytest test script test_decide_next_move.py
+Simulation Runner: Simulation completed, simulation_report.json saved
+Reviewer Agent: Generated review_report.json from simulation report
+IRSIM Benchmark: IRSIM benchmark finished, benchmark report generated
+Benchmark Reviewer: Generated benchmark_review_report.json
+System: Benchmark result already fully efficient, skip revision iteration
+System: Full end-to-end pipeline completed successfully
